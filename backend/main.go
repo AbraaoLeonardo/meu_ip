@@ -1,17 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
+	"meu_ip/middleware"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
-func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, r.RemoteAddr)
-	}).Methods("GET")
+type Message struct {
+	Content string `json:"content"`
+}
 
-	http.ListenAndServe(":8080", r)
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	response := Message{Content: r.RemoteAddr}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // optional but good practice
+	json.NewEncoder(w).Encode(response)
+}
+
+func main() {
+	http.HandleFunc("/", helloHandler)
+	handler := middleware.EnableCORS(http.DefaultServeMux)
+	http.ListenAndServe(":8080", handler)
 }
