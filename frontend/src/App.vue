@@ -20,7 +20,7 @@ export default {
   methods: {
     async fetchMessage() {
       try {
-        const response = await axios.get('http://localhost:8080/');
+        const response = await axios.get('http://localhost:8080/api/hello');
         this.message = response.data.content;
       } catch (error) {
         console.error('Erro ao buscar a mensagem:', error);
