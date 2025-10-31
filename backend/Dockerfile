@@ -1,6 +1,6 @@
 FROM golang:tip-alpine3.22 AS builder
 WORKDIR /APP
-COPY . /APP
+COPY backend/* /APP
 RUN go build -o bin/app
 
 
